@@ -159,6 +159,17 @@ const filterPosts =  async (req: Request, res: Response) => {
       } else {
         res.status(404).json({ error: 'No posts found' });
       }
+    }else if (filter.id){
+      const intValue: Record<string, number> = { id: parseInt(filter.id as string) };
+      const posts = await prisma.post.findMany({
+        where: intValue,
+      });
+
+      if (posts.length > 0) {
+        res.status(200).json(posts);
+      } else {
+        res.status(404).json({ error: 'No posts found' });
+      }
     }else{
       const posts = await prisma.post.findMany({
         where: filter,
